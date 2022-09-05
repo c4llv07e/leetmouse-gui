@@ -11,10 +11,9 @@ Parameters = {
     "Sensitivity Cap": ModuleParameter("SensitivityCap"),
     "Offset": ModuleParameter("Offset"),
     "Scrolls per Tick": ModuleParameter("ScrollsPerTick"),
-    "Midpoint": ModuleParameter("Midpoint")
+    "Midpoint": ModuleParameter("Midpoint"),
+    "Exponent": ModuleParameter("Exponent")
 }
-
-Parameters["Exponent"] = ModuleParameter("Exponent")
 
 ModeLookup = {
     "Linear": 1,
