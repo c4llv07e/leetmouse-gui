@@ -32,7 +32,7 @@ def main():
         if str(AccelerationMode) == str(key):
             AccelerationModePlainText = mode
 
-            layout = [[sg.Text("LEETMOUSE")]]
+    layout = [[sg.Text("LEETMOUSE")]]
     layout.append([sg.Text("Mode: "),
                    sg.Combo(["Linear", "Classic", "Motivity"],
                             default_value=AccelerationModePlainText,
