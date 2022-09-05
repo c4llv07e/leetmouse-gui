@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import PySimpleGUIQt as sg
 import os.path
 from ModuleParameter import ModuleParameter
