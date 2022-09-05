@@ -4,7 +4,7 @@ import PySimpleGUIQt as sg
 import os.path
 from ModuleParameter import ModuleParameter
 
-Parameters = {
+params = {
     "Acceleration": ModuleParameter("Acceleration"),
     "Sensitivity": ModuleParameter("Sensitivity"),
     "Speed Cap": ModuleParameter("SpeedCap"),
@@ -15,33 +15,33 @@ Parameters = {
     "Exponent": ModuleParameter("Exponent")
 }
 
-ModeLookup = {
+modeLookup = {
     "Linear": 1,
     "Classic": 2,
     "Motivity": 3
 }
 
 def main():
-    UpdateParameter = ModuleParameter("update")
-    AccelerationModeParameter = ModuleParameter("AccelerationMode")
-    AccelerationMode = AccelerationModeParameter.parameterValue
-    AccelerationModePlainText = "Linear"
-    
+    update = ModuleParameter("update")
+    accelMode = ModuleParameter("AccelerationMode")
+    accelModeVal = accelMode.parameterValue
+    defaultAccelMode = "Linear"
+
     # get the acceleration mode to set the combo box
-    for mode, key in ModeLookup.items():
-        if str(AccelerationMode) == str(key):
-            AccelerationModePlainText = mode
+    for mode, key in modeLookup.items():
+        if str(accelModeVal) == str(key):
+            defaultAccelMode = mode
 
     layout = [[sg.Text("LEETMOUSE")]]
     layout.append([sg.Text("Mode: "),
                    sg.Combo(["Linear", "Classic", "Motivity"],
-                            default_value=AccelerationModePlainText,
+                            default_value=defaultAccelMode,
                             enable_events=True, key="modecombo")])
 
-    for param in Parameters:
+    for param in params:
         layout.append([sg.Text(param),
-                       sg.InputText(default_text=Parameters[param].parameterValue,
-                                    key=Parameters[param].parameterName)])
+                       sg.InputText(default_text=params[param].parameterValue,
+                                    key=params[param].parameterName)])
 
     layout.append([sg.Button("Update")])
 
@@ -51,18 +51,18 @@ def main():
         event, values = window.read()
         if event == "Update":
             # Update parameters
-            for param in Parameters:
-                Parameters[param].set(window[Parameters[param].parameterName].get())
-                AccelerationModeParameter.set(str(AccelerationMode))
+            for param in params:
+                params[param].set(window[params[param].parameterName].get())
+                accelMode.set(str(accelModeVal))
 
             # Set update flag so LEETMOUSE knows to read changes
-            UpdateParameter.set("1")
+            update.set("1")
 
         if event == "modecombo":
             # Mode was changed
             mode = values["modecombo"]
             # Save change but don't write it yet
-            AccelerationMode = ModeLookup[mode]
+            accelModeVal = modeLookup[mode]
 
         if event == sg.WIN_CLOSED:
             break
