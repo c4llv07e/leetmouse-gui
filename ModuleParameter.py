@@ -6,6 +6,7 @@ class ModuleParameter:
         self.parameterName = name
         f = open("/sys/module/leetmouse/parameters/" + self.parameterName, "r")
         self.parameterValue = f.read().strip(' \t\n\r')
+        f.close()
 
     def set(self, val):
         self.parameterValue = val
