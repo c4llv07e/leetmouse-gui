@@ -1,5 +1,9 @@
-# Project exclude paths
-/venv/
 
-# Python cache
-__pycache__/
+# object files
+*.o
+
+# executable
+leetmouse-ui
+
+# imgui local config
+imgui.ini
