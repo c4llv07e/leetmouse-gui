@@ -1,4 +1,5 @@
 
+#include "implot.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -53,13 +54,15 @@ main(int, char**)
 
   glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-  window = glfwCreateWindow(420, 360, "leetmouse gui", NULL, NULL);
+  window = glfwCreateWindow(1024, 380, "leetmouse gui", NULL, NULL);
   assert(window);
     
   glfwMakeContextCurrent(window);
   
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
+  ImPlot::CreateContext();
+  
   ImGuiIO& io = ImGui::GetIO(); (void)io;
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
@@ -115,6 +118,7 @@ main(int, char**)
 
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
+  ImPlot::DestroyContext();
   ImGui::DestroyContext();
 
   glfwDestroyWindow(window);

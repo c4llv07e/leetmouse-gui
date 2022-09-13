@@ -1,5 +1,6 @@
 #include "app.hh"
 
+#include "implot.h"
 #include "imgui.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,14 +10,26 @@
 
 void renderUi(void);
 
+enum paramNames
+  {
+    paramAcceleration,
+    paramSensitivity,
+    paramSpeedCap,
+    paramSensitivityCap,
+    paramOffset,
+    paramMidpoint,
+    paramExponent,
+    paramsLen,
+  };
+
 const char* params[] = {
-  "Acceleration",
-  "Sensitivity",
-  "SpeedCap",
-  "SensitivityCap",
-  "Offset",
-  "Midpoint",
-  "Exponent",
+  [paramAcceleration] = "Acceleration",
+  [paramSensitivity] = "Sensitivity",
+  [paramSpeedCap] = "SpeedCap",
+  [paramSensitivityCap] = "SensitivityCap",
+  [paramOffset] = "Offset",
+  [paramMidpoint] = "Midpoint",
+  [paramExponent] = "Exponent",
   nullptr
 };
 
@@ -42,6 +55,12 @@ const static ImGuiWindowFlags window_flags =
   | ImGuiWindowFlags_NoMove
   | ImGuiWindowFlags_NoBringToFrontOnFocus
   | ImGuiWindowFlags_NoNavFocus;
+
+inline float
+min(float a, float b)
+{
+  return a<b?a:b;
+}
 
 void
 getModuleParameter(const char* name, char* buffer)
@@ -154,26 +173,54 @@ renderUi(void)
     ImGui::Begin("leetmouse gui", nullptr, window_flags);
         
     ImGui::Text("leetmouse gui");
-    ImGui::Combo("mode", &currentAccelMode, accelModes, 3);
 
-    for (int i = 0; params[i] != nullptr; ++i)
-      {
-        ImGui::SliderFloat(params[i], &paramValues[i], -10.0f, 10.0f, "%.2f");
-      }
+    ImGui::BeginGroup();
+    ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x * 0.5f);
+    {
+      ImGui::Combo("mode", &currentAccelMode, accelModes, 3);
+
+      for (int i = 0; params[i] != nullptr; ++i)
+        {
+          ImGui::SliderFloat(params[i], &paramValues[i], -10.0f, 10.0f, "%.2f");
+        }
     
-    for (int i = 0; intParams[i] != nullptr; ++i)
-      {
-        ImGui::SliderInt(intParams[i], &intParamValues[i], -10, 10);
-      }
+      for (int i = 0; intParams[i] != nullptr; ++i)
+        {
+          ImGui::SliderInt(intParams[i], &intParamValues[i], -10, 10);
+        }
+      
+      if (ImGui::Button("update"))
+        {
+          for (int i = 0; params[i] != nullptr; ++i)
+            setModuleParameterFloat(params[i], paramValues[i]);
+          for (int i = 0; intParams[i] != nullptr; ++i)
+            setModuleParameterInt(intParams[i], intParamValues[i]);
+          setModuleParameterInt("AccelerationMode", currentAccelMode + 1);
+          setModuleParameterInt("update", 1);
+        }
+    }
+    ImGui::PopItemWidth();
+    ImGui::EndGroup();
 
-    if (ImGui::Button("update"))
+    ImGui::SameLine();
+
+    if (ImPlot::BeginPlot("My Plot"))
       {
-        for (int i = 0; params[i] != nullptr; ++i)
-          setModuleParameterFloat(params[i], paramValues[i]);
-        for (int i = 0; intParams[i] != nullptr; ++i)
-          setModuleParameterInt(intParams[i], intParamValues[i]);
-        setModuleParameterInt("AccelerationMode", currentAccelMode + 1);
-        setModuleParameterInt("update", 1);
+        float x[30] = {0};
+        float y[30] = {0};
+        for (int i = 0; i < 30; ++i)
+          {
+            x[i] = i;
+            y[i] = i;
+            if (paramValues[paramSpeedCap] != 0)
+              y[i] = min(y[i], paramValues[paramSpeedCap]);
+            y[i] -= paramValues[paramOffset];
+            
+            y[i] *= paramValues[paramAcceleration];
+            y[i] += 1;
+          }
+        ImPlot::PlotLine("My Line Plot", x, y, 30);
+        ImPlot::EndPlot();
       }
 
     ImGui::End();
