@@ -1,22 +1,41 @@
 # leetmouse-gui
-Simple GUI for my fork of leetmouse (https://github.com/Skyl3r/leetmouse). This program assumes you've already installed the leetmouse driver.
-Please note it lacks form validation. All fields should be formatted as floats with an 'f' appended to the end, as in the example photo below.
 
-![image](https://i.imgur.com/RFpL59Z.png)
+Fork of the simple GUI for Skyl3r's fork of leetmouse (https://github.com/Skyl3r/leetmouse)
+or for my fork (https://github.com/c4llv07e/leetmouse-gui)
+rewritten in C++ and ImGUI (with ImPlot).
+This program assumes you've already installed the leetmouse driver.
+
+## Cloning
+
+Don't forget to clone repo with all submodules
+
+``` git clone --recurse-sumbodules https://github.com/c4llv07e/leetmouse-gui.git ```
+
+or
+
+``` git submodule init ```
+
+![image](screenshot.png)
 
 ## Requirements
-- PySimpleGUIQt
 
-``` sudo pip install pysimpleguiqt ```
+- GLFW
+
+## Build
+
+``` make ```
 
 ## Use
 
 Since this program must change module parameters it needs root access:
-``` sudo python3 main.py ```
+
+``` sudo ./leetmouse-gui ```
+
+or
+
+``` sudo make run ```
 
 
 ## Todo
-- Form validation
-- Error catching and handling for file I/O
-- Graph to display acceleration curve (output vs input)
-- Restructure so that fields are ordered in a way that makes sense, IE mode & mode specific options together, general options together
+
+- Better graph
