@@ -219,7 +219,7 @@ renderUi(void)
             y[i] *= paramValues[paramAcceleration];
             y[i] += 1;
           }
-        ImPlot::PlotLine("My Line Plot", x, y, 30);
+        ImPlot::PlotLine("", x, y, 30);
         ImPlot::EndPlot();
       }
 
